@@ -1,0 +1,75 @@
+﻿@page
+@using RazorPages2.Models
+@model RazorPages2.Pages.PizzaModel
+@{
+    ViewData["Title"] = "Pizza List";
+}
+
+<h1>Pizza List 🍕</h1>
+<form method="post" class="card p-3 mb-4 shadow-sm">
+    <div class="row mb-2">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="form-group">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="NewPizza.Name" class="form-label">Name</label>
+            <input type="text" asp-for="NewPizza.Name" class="form-control" placeholder="Enter pizza name" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewPizza.Size" class="form-label">Size</label>
+            <select asp-for="NewPizza.Size" asp-items="Html.GetEnumSelectList<PizzaSize>()" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewPizza.IsGlutenFree" class="form-label d-block">Gluten Free</label>
+            <select asp-for="NewPizza.IsGlutenFree" class="form-control">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewPizza.Price" class="form-label">Price</label>
+            <input asp-for="NewPizza.Price" class="form-control" placeholder="Enter price" />
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-primary">Add Pizza</button>
+    </div>
+</div>
+
+</form>
+
+<table class="table table-hover mt-4 shadow-sm">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Size</th>
+            <th scope="col">Gluten Free</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pizza in Model.pizzas)
+        {
+                <tr>
+                    <td>@pizza.Name</td>
+                    <td>@($"{pizza.Price:C}")</td>
+                    <td>@pizza.Size</td>
+                    <td>@(pizza.IsGlutenFree ? "Yes" : "No")</td>
+                    <td>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@pizza.Id" onsubmit="return confirm('Are you sure you want to delete this pizza?');">
+                            <button class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

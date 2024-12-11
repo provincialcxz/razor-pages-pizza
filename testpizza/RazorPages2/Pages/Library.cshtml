@@ -1,0 +1,66 @@
+﻿@page
+@using RazorPages2.Models
+@model RazorPages2.Pages.LibraryModel
+@{
+    ViewData["Title"] = "Library";
+}
+
+<h1>Library 📕📔</h1>
+<form method="post" class="card p-3">
+    <div class="row mb-3">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="form-group mb-0 row">
+        <div class="col-md-3">
+            <label asp-for="NewBook.Name" class="form-label">Name</label>
+            <input type="text" asp-for="NewBook.Name" class="form-control" placeholder="Enter book name" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewBook.Author" class="form-label">Author</label>
+            <input type="text" asp-for="NewBook.Author" class="form-control" placeholder="Enter author's name" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewBook.Genre" class="form-label">Genre</label>
+            <select asp-for="NewBook.Genre" asp-items="Html.GetEnumSelectList<BookGenre>()" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NewBook.Price" class="form-label">Price</label>
+            <input asp-for="NewBook.Price" class="form-control" placeholder="Enter price" />
+        </div>
+        <div class="col-md-12 d-flex justify-content-center mt-3">
+            <button class="btn btn-primary">Add Book</button>
+        </div>
+    </div>
+</form>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Author</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Price</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var book in Model.Books)
+    {
+        <tr>
+            <td>@book.Name</td>
+            <td>@book.Author</td>
+            <td>@book.Genre</td>
+            <td>@($"{book.Price:C}")</td>
+            <td>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@book.Id" class="d-inline">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
